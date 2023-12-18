@@ -18,7 +18,7 @@ WORKDIR /app
 COPY . .
 #COPY .env.example .env
 RUN make install
-#RUN npm ci
+RUN make migrate
 #RUN npm run build
 
-CMD ["bash", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"]
+CMD ["bash", "-c", "=php artisan serve --host=0.0.0.0 --port=$PORT"]

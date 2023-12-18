@@ -16,6 +16,7 @@ RUN apt-get install -y nodejs
 WORKDIR /app
 
 COPY . .
+COPY .env.example .env
 RUN composer install
 RUN npm ci
 RUN npm run build

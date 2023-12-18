@@ -16,7 +16,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 WORKDIR /app
 
 COPY . .
-COPY .env.example .env
+#COPY .env.example .env
 RUN composer install
 #RUN npm ci
 #RUN npm run build

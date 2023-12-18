@@ -7,7 +7,9 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <a href="{{ route('task_statuses.create') }}">{{ __('task_status.Create task status') }}</a>
+            @if (Auth::user())
+                <a href="{{ route('task_statuses.create') }}">{{ __('task_status.Create task status') }}</a>
+            @endif
             <table class="mt-4">
                 <thead class="border-b-2 border-solid border-black text-left">
                     <tr>

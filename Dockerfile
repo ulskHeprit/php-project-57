@@ -20,6 +20,5 @@ COPY .env.example .env
 RUN composer install
 #RUN npm ci
 #RUN npm run build
-RUN php artisan key:generate
 
 CMD ["bash", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"]

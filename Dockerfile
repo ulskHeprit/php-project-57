@@ -16,7 +16,9 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 WORKDIR /app
 
 COPY . .
-
+#COPY .env.example .env
 RUN make install
-RUN make migrate
-RUN make start
+#RUN npm ci
+#RUN npm run build
+
+CMD ["bash", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"]

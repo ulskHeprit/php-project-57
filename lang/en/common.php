@@ -7,4 +7,5 @@ return [
     'Create' => 'Create',
     'Update' => 'Update',
     'Action' => 'Action',
+    'Failed to delete status' => 'Failed to delete status',
 ];

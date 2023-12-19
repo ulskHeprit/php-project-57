@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('labels', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
+        Schema::create('task_label', function (Blueprint $table) {
+            $table->bigInteger('task_id');
+            $table->foreign('task_id')->references('id')->on('tasks');
+            $table->bigInteger('label_id');
+            $table->foreign('label_id')->references('id')->on('labels');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('labels');
+        Schema::dropIfExists('task_label');
     }
 };

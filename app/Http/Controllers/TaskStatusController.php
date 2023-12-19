@@ -36,9 +36,9 @@ class TaskStatusController extends Controller
             'name' => 'required|min:1',
         ]);
 
-        $article = new TaskStatus();
-        $article->fill($data);
-        $article->save();
+        $taskStatus = new TaskStatus();
+        $taskStatus->fill($data);
+        $taskStatus->save();
 
         return redirect()
             ->route('task_statuses.index');
@@ -81,7 +81,11 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-        $taskStatus->delete();
+        if (count($taskStatus->tasks)) {
+            flash(__('Failed to delete status'), 'warning');
+        } else {
+            $taskStatus->delete();
+        }
 
         return redirect()->route('task_statuses.index');
     }

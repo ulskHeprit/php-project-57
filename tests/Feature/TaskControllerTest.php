@@ -7,15 +7,13 @@ use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\CanAssertFlash;
 use Tests\TestCase;
 
-class TaskStatusControllerTest extends TestCase
+class TaskControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use CanAssertFlash;
 
-    protected $url = '/task_statuses/';
+    protected $url = '/tasks/';
     protected User $user;
 
     public function setUp(): void
@@ -36,9 +34,7 @@ class TaskStatusControllerTest extends TestCase
 
     public function test_show_without_auth(): void
     {
-        $response = $this->get($this->url . '1');
-
-        $response->assertRedirect(route('login'));
+        $this->test_show_with_auth();
     }
 
     public function test_create_without_auth(): void
@@ -55,7 +51,7 @@ class TaskStatusControllerTest extends TestCase
             ->actingAs($this->user)
             ->get($this->url . 'create');
 
-        $response->assertViewIs('task_status.create');
+        $response->assertViewIs('task.create');
     }
 
     public function test_store_without_auth(): void
@@ -63,7 +59,10 @@ class TaskStatusControllerTest extends TestCase
         $response = $this->post(
             $this->url,
             [
-                'name' => 'Test status'
+                'name' => 'Test task',
+                'description' => 'Task descr',
+                'status_id' => 1,
+                'assigned_to_id' => 1,
             ]
         );
 
@@ -72,30 +71,40 @@ class TaskStatusControllerTest extends TestCase
 
     public function test_store_with_auth(): void
     {
+        $taskStatus = $this->createTaskStatus();
+
         $this
             ->actingAs($this->user)
             ->post(
                 $this->url,
                 [
-                    'name' => 'Test status'
+                    'name' => 'Test task',
+                    'description' => 'Task descr',
+                    'status_id' => $taskStatus->id,
+                    'assigned_to_id' => $this->user->id,
                 ]
         );
 
-        $taskStatus = TaskStatus::find(1);
+        $task = Task::find(1);
 
-        $this->assertEquals('Test status', $taskStatus->name);
+        $this->assertEquals('Test task', $task->name);
+        $this->assertEquals('Task descr', $task->description);
+        $this->assertEquals($taskStatus->id, $task->status->id);
+        $this->assertEquals($this->user->id, $task->creator->id);
+        $this->assertEquals($this->user->id, $task->assignedUser->id);
     }
 
     public function test_show_with_auth(): void
     {
         $taskStatus = $this->createTaskStatus();
+        $task = $this->createTask($this->user, $taskStatus);
 
         $response = $this
             ->actingAs($this->user)
-            ->get($this->url . $taskStatus->id);
+            ->get($this->url . $task->id);
 
-        $response->assertViewIs('task_status.show');
-        $response->assertSee($taskStatus->name, false);
+        $response->assertViewIs('task.show');
+        $response->assertSee($task->name, false);
     }
 
     public function test_edit_without_auth(): void
@@ -108,13 +117,14 @@ class TaskStatusControllerTest extends TestCase
     public function test_edit_with_auth(): void
     {
         $taskStatus = $this->createTaskStatus();
+        $task = $this->createTask($this->user, $taskStatus);
 
         $response = $this
             ->actingAs($this->user)
-            ->get($this->url . $taskStatus->id . '/edit');
+            ->get($this->url . $task->id . '/edit');
 
-        $response->assertViewIs('task_status.edit');
-        $response->assertSee($taskStatus->name, false);
+        $response->assertViewIs('task.edit');
+        $response->assertSee($task->name, false);
     }
 
     public function test_update_without_auth(): void
@@ -132,21 +142,30 @@ class TaskStatusControllerTest extends TestCase
 
     public function test_update_with_auth(): void
     {
+        $assignedUser = User::factory()->create();
         $taskStatus = $this->createTaskStatus();
+        $task = $this->createTask($this->user, $taskStatus);
+        $taskStatus2 = $this->createTaskStatus();
 
         $this
             ->actingAs($this->user)
             ->patch(
-            $this->url . $taskStatus->id,
-            [
-                'id' => $taskStatus->id,
-                'name' => 'Edited test status'
-            ]
-        );
+                $this->url . $task->id,
+                [
+                    'id' => $task->id,
+                    'name' => 'Edited task',
+                    'description' => 'Edited task descr',
+                    'status_id' => $taskStatus2->id,
+                    'assigned_to_id' => $assignedUser->id,
+                ]
+            );
 
-        $taskStatus->refresh();
+        $task->refresh();
 
-        $this->assertEquals('Edited test status', $taskStatus->name);
+        $this->assertEquals('Edited task', $task->name);
+        $this->assertEquals('Edited task descr', $task->description);
+        $this->assertEquals($taskStatus2->id, $task->status->id);
+        $this->assertEquals($assignedUser->id, $task->assignedUser->id);
     }
 
     public function test_delete_without_auth(): void
@@ -156,31 +175,33 @@ class TaskStatusControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
-    public function test_delete_with_auth(): void
+    public function test_delete_with_auth_correct(): void
     {
         $taskStatus = $this->createTaskStatus();
+        $task = $this->createTask($this->user, $taskStatus);
 
         $this
             ->actingAs($this->user)
-            ->delete($this->url . $taskStatus->id);
+            ->delete($this->url . $task->id);
 
         $this->expectException(ModelNotFoundException::class);
 
-        TaskStatus::findOrFail($taskStatus->id);
+        Task::findOrFail($task->id);
     }
 
-    public function test_delete_with_auth_with_task(): void
+    public function test_delete_with_auth_incorrect(): void
     {
         $taskStatus = $this->createTaskStatus();
-        $this->createTask($this->user, $taskStatus);
+        $task = $this->createTask($this->user, $taskStatus);
+        $anotherUser = User::factory()->create();
 
-        $this
-            ->actingAs($this->user)
-            ->delete($this->url . $taskStatus->id);
+        $response = $this
+            ->actingAs($anotherUser)
+            ->delete($this->url . $task->id);
 
-        $this->assertFlash('warning', __('Failed to delete status'));
+        $this->assertEquals(401, $response->status());
 
-        TaskStatus::findOrFail($taskStatus->id);
+        Task::findOrFail($task->id);
     }
 
     protected function createTask(User $user, TaskStatus $taskStatus): Task

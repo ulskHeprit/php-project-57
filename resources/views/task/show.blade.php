@@ -20,6 +20,11 @@
                     {{ html()->form()->close() }}
                 </p>
             @endif
+            <p>
+                @foreach($task->labels as $label)
+                    {{$label->name}}<br>
+                @endforeach
+            </p>
         </div>
     </div>
 </x-app-layout>

@@ -2,22 +2,20 @@
 
 namespace Tests\Feature;
 
-use App\Models\Task;
-use App\Models\TaskStatus;
-use App\Models\User;
+use App\Models\Label;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\CanAssertFlash;
 use Tests\TestCase;
 use Tests\Traits\Helpers;
 
-class TaskStatusControllerTest extends TestCase
+class LabelControllerTest extends TestCase
 {
     use RefreshDatabase;
     use CanAssertFlash;
     use Helpers;
 
-    protected $url = '/task_statuses/';
+    protected $url = '/labels/';
 
     /**
      * A basic feature test example.
@@ -50,7 +48,7 @@ class TaskStatusControllerTest extends TestCase
             ->actingAs($this->user)
             ->get($this->url . 'create');
 
-        $response->assertViewIs('task_status.create');
+        $response->assertViewIs('label.create');
     }
 
     public function test_store_without_auth(): void
@@ -58,7 +56,7 @@ class TaskStatusControllerTest extends TestCase
         $response = $this->post(
             $this->url,
             [
-                'name' => 'Test status'
+                'name' => 'Test label'
             ]
         );
 
@@ -72,25 +70,28 @@ class TaskStatusControllerTest extends TestCase
             ->post(
                 $this->url,
                 [
-                    'name' => 'Test status'
+                    'name' => 'Test label',
+                    'description' => 'Test label descr',
                 ]
-        );
+            );
 
-        $taskStatus = TaskStatus::find(1);
+        $label = Label::find(1);
 
-        $this->assertEquals('Test status', $taskStatus->name);
+        $this->assertEquals('Test label', $label->name);
+        $this->assertEquals('Test label descr', $label->description);
     }
 
     public function test_show_with_auth(): void
     {
-        $taskStatus = $this->createTaskStatus();
+        $label = $this->createLabel();
 
         $response = $this
             ->actingAs($this->user)
-            ->get($this->url . $taskStatus->id);
+            ->get($this->url . $label->id);
 
-        $response->assertViewIs('task_status.show');
-        $response->assertSee($taskStatus->name, false);
+        $response->assertViewIs('label.show');
+        $response->assertSee($label->name, false);
+        $response->assertSee($label->description, false);
     }
 
     public function test_edit_without_auth(): void
@@ -102,14 +103,15 @@ class TaskStatusControllerTest extends TestCase
 
     public function test_edit_with_auth(): void
     {
-        $taskStatus = $this->createTaskStatus();
+        $label = $this->createLabel();
 
         $response = $this
             ->actingAs($this->user)
-            ->get($this->url . $taskStatus->id . '/edit');
+            ->get($this->url . $label->id . '/edit');
 
-        $response->assertViewIs('task_status.edit');
-        $response->assertSee($taskStatus->name, false);
+        $response->assertViewIs('label.edit');
+        $response->assertSee($label->name, false);
+        $response->assertSee($label->description, false);
     }
 
     public function test_update_without_auth(): void
@@ -118,7 +120,7 @@ class TaskStatusControllerTest extends TestCase
             $this->url . '1',
             [
                 'id' => 1,
-                'name' => 'Edited test status'
+                'name' => 'Edited test label'
             ]
         );
 
@@ -127,21 +129,24 @@ class TaskStatusControllerTest extends TestCase
 
     public function test_update_with_auth(): void
     {
-        $taskStatus = $this->createTaskStatus();
+        $label = $this->createLabel();
+        $newDate = [
+            'id' => $label->id,
+            'name' => 'Edited test label',
+            'description' => 'Edited test label descr'
+        ];
 
         $this
             ->actingAs($this->user)
             ->patch(
-            $this->url . $taskStatus->id,
-            [
-                'id' => $taskStatus->id,
-                'name' => 'Edited test status'
-            ]
-        );
+                $this->url . $label->id,
+                $newDate
+            );
 
-        $taskStatus->refresh();
+        $label->refresh();
 
-        $this->assertEquals('Edited test status', $taskStatus->name);
+        $this->assertEquals($newDate['name'], $label->name);
+        $this->assertEquals($newDate['description'], $label->description);
     }
 
     public function test_delete_without_auth(): void
@@ -153,28 +158,29 @@ class TaskStatusControllerTest extends TestCase
 
     public function test_delete_with_auth(): void
     {
-        $taskStatus = $this->createTaskStatus();
+        $label = $this->createLabel();
 
         $this
             ->actingAs($this->user)
-            ->delete($this->url . $taskStatus->id);
+            ->delete($this->url . $label->id);
 
         $this->expectException(ModelNotFoundException::class);
 
-        TaskStatus::findOrFail($taskStatus->id);
+        Label::findOrFail($label->id);
     }
 
     public function test_delete_with_auth_with_task(): void
     {
         $taskStatus = $this->createTaskStatus();
-        $this->createTask($this->user, $taskStatus);
+        $label = $this->createLabel();
+        $this->createTask($this->user, $taskStatus, $label);
 
         $this
             ->actingAs($this->user)
-            ->delete($this->url . $taskStatus->id);
+            ->delete($this->url . $label->id);
 
-        $this->assertFlash('warning', __('Failed to delete status'));
+        $this->assertFlash('warning', __('Failed to delete label'));
 
-        TaskStatus::findOrFail($taskStatus->id);
+        Label::findOrFail($label->id);
     }
 }

@@ -32,7 +32,6 @@ jobs:
           node-version: '20.x'
       - run: npm ci
       - run: npm run build
-      - run: touch database/database.sqlite
 
       - name: Run tests
         run: make test

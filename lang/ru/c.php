@@ -24,4 +24,5 @@ return [
     'Profile' => 'Профиль',
     'Register' => 'Регистрация',
     'Main' => 'Главная',
+    'Hello from Hexlet!' => 'Привет от Хекслета!',
 ];

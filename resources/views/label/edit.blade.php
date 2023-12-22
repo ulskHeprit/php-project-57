@@ -17,11 +17,11 @@
         @endif
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             {{ html()->modelForm($label, 'PATCH', route('labels.update', $label))->open() }}
-                {{ html()->label(__('Name'), 'name') }}
+                {{ html()->label(__('c.Name'), 'name') }}
                 {{ html()->text('name') }}
-                {{ html()->label(__('Description'), 'description') }}
+                {{ html()->label(__('c.Description'), 'description') }}
                 {{ html()->text('description') }}
-                {{ html()->submit(__('Update')) }}
+                {{ html()->submit(__('c.Update')) }}
             {{ html()->closeModelForm() }}
         </div>
     </div>

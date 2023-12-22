@@ -17,15 +17,15 @@
         @endif
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             {{ html()->modelForm($task, 'POST', route('tasks.store'))->open() }}
-                {{ html()->label(__('Name'), 'name') }}
+                {{ html()->label(__('c.Name'), 'name') }}
                 {{ html()->text('name') }}
-                {{ html()->label(__('Description'), 'description') }}
+                {{ html()->label(__('c.Description'), 'description') }}
                 {{ html()->textarea('description') }}
-                {{ html()->label(__('Status'), 'status_id') }}
+                {{ html()->label(__('c.Status'), 'status_id') }}
                 {{ html()->text('status_id') }}
-                {{ html()->label(__('Assigned to'), 'assigned_to_id') }}
+                {{ html()->label(__('c.Assigned to'), 'assigned_to_id') }}
                 {{ html()->text('assigned_to_id') }}
-                {{ html()->submit(__('Create')) }}
+                {{ html()->submit(__('c.Create')) }}
             {{ html()->closeModelForm() }}
         </div>
     </div>

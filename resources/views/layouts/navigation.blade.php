@@ -6,13 +6,13 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('tasks.index')" :active="request()->routeIs('tasks.index')">
-                        {{ __('Tasks') }}
+                        {{ __('c.Tasks') }}
                     </x-nav-link>
                     <x-nav-link :href="route('task_statuses.index')" :active="request()->routeIs('task_statuses.index')">
-                        {{ __('Task statuses') }}
+                        {{ __('c.Task statuses') }}
                     </x-nav-link>
                     <x-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.index')">
-                        {{ __('Labels') }}
+                        {{ __('c.Labels') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                     <x-slot name="content">
                         @if (Auth::user())
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('c.Profile') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -45,15 +45,15 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('c.Log Out') }}
                             </x-dropdown-link>
                         </form>
                         @else
                             <x-dropdown-link :href="route('login')">
-                                {{ __('Log in') }}
+                                {{ __('c.Log in') }}
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('register')">
-                                {{ __('Register') }}
+                                {{ __('c.Register') }}
                             </x-dropdown-link>
                         @endif
                     </x-slot>

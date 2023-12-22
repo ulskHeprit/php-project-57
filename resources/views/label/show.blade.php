@@ -7,15 +7,15 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <p>{{ __('ID') }}: {{ $label->id }}</p>
-            <p>{{ __('Name') }}: {{ $label->name }}</p>
-            <p>{{ __('Description') }}: {{ $label->description }}</p>
-            <p>{{ __('Creation date') }}: {{ $label->created_at }}</p>
+            <p>{{ __('c.ID') }}: {{ $label->id }}</p>
+            <p>{{ __('c.Name') }}: {{ $label->name }}</p>
+            <p>{{ __('c.Description') }}: {{ $label->description }}</p>
+            <p>{{ __('c.Creation date') }}: {{ $label->created_at }}</p>
             @if (Auth::user())
                 <p>
-                    <a href="{{ route('labels.edit', $label) }}">{{ __('Edit') }}</a>
+                    <a href="{{ route('labels.edit', $label) }}">{{ __('c.Edit') }}</a>
                     {{ html()->form('DELETE', route('labels.destroy', $label))->open() }}
-                        {{ html()->submit('Delete') }}
+                        {{ html()->submit(__('c.Delete')) }}
                     {{ html()->form()->close() }}
                 </p>
             @endif

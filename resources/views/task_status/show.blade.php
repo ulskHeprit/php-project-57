@@ -7,14 +7,14 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <p>{{ __('ID') }}: {{ $taskStatus->id }}</p>
-            <p>{{ __('Name') }}: {{ $taskStatus->name }}</p>
-            <p>{{ __('Creation date') }}: {{ $taskStatus->created_at }}</p>
+            <p>{{ __('c.ID') }}: {{ $taskStatus->id }}</p>
+            <p>{{ __('c.Name') }}: {{ $taskStatus->name }}</p>
+            <p>{{ __('c.Creation date') }}: {{ $taskStatus->created_at }}</p>
             @if (Auth::user())
                 <p>
-                    <a href="{{ route('task_statuses.edit', $taskStatus) }}">{{ __('Edit') }}</a>
+                    <a href="{{ route('task_statuses.edit', $taskStatus) }}">{{ __('c.Edit') }}</a>
                     {{ html()->form('DELETE', route('task_statuses.destroy', $taskStatus))->open() }}
-                        {{ html()->submit('Delete') }}
+                        {{ html()->submit(__('c.Delete')) }}
                     {{ html()->form()->close() }}
                 </p>
             @endif

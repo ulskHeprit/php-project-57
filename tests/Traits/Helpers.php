@@ -17,13 +17,13 @@ trait Helpers
         $this->user = User::factory()->create();
     }
 
-    protected function createTask(User $user, TaskStatus $taskStatus, ?Label $label = null): Task
+    protected function createTask(User $user, TaskStatus $taskStatus, ?Label $label = null, ?User $assignedTo = null, string $name = null): Task
     {
         $task = new Task();
-        $task->name = 'Test task';
+        $task->name = $name ?? 'Test task';
         $task->description = 'Task description';
         $task->created_by_id = $user->id;
-        $task->assigned_to_id = $user->id;
+        $task->assigned_to_id = $assignedTo?->id ?? $user->id;
         $task->status_id = $taskStatus->id;
         $task->save();
         if (!is_null($label)) {
@@ -34,19 +34,19 @@ trait Helpers
         return $task;
     }
 
-    protected function createTaskStatus(): TaskStatus
+    protected function createTaskStatus(string $name = null): TaskStatus
     {
         $taskStatus = new TaskStatus();
-        $taskStatus->name = 'Test status';
+        $taskStatus->name = $name ?? 'Test status';
         $taskStatus->save();
 
         return $taskStatus;
     }
 
-    protected function createLabel(): Label
+    protected function createLabel(string $name = null): Label
     {
         $label = new Label();
-        $label->name = 'Test label';
+        $label->name = $name ?? 'Test label';
         $label->description = 'Test label descr';
         $label->save();
 

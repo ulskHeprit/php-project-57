@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'ID' => 'ID',
+    'Name' => 'Имя',
+    'Creation date' => 'Дата создания',
+    'Create' => 'Создать',
+    'Edit' => 'Редактировать',
+    'Update' => 'Обновить',
+    'Delete' => 'Удалить',
+    'Action' => 'Действие',
+    'Failed to delete status' => 'Не удалось удалить статус',
+    'Failed to delete label' => 'Не удалось удалить маркер',
+    'Submit' => 'Применить',
+    'Status' => 'Статус',
+    'Creator' => 'Автор',
+    'Assigned to' => 'Исполнитель',
+    'Tasks' => 'Задачи',
+    'Task statuses' => 'Статусы',
+    'Labels' => 'Метки',
+    'Description' => 'Описание',
+    'Log in' => 'Войти',
+    'Log Out' => 'Выйти',
+    'Profile' => 'Профиль',
+    'Register' => 'Регистрация',
+    'Main' => 'Главная',
+];

@@ -11,9 +11,22 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::paginate(10);
+        $filter = $request->get('filter');
+        $query = Task::query();
+
+        if (!empty($filter['status_id'])) {
+            $query->where('status_id', $filter['status_id']);
+        }
+        if (!empty($filter['created_by_id'])) {
+            $query->where('created_by_id', $filter['created_by_id']);
+        }
+        if (!empty($filter['assigned_to_id'])) {
+            $query->where('assigned_to_id', $filter['assigned_to_id']);
+        }
+
+        $tasks = $query->paginate(20);
 
         return view('task.index', compact('tasks'));
     }

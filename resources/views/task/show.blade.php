@@ -7,16 +7,16 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <p>{{ __('ID') }}: {{ $task->id }}</p>
-            <p>{{ __('Name') }}: {{ $task->name }}</p>
-            <p>{{ __('Description') }}: {{ $task->description }}</p>
-            <p>{{ __('Status') }}: {{ $task->status->name }}</p>
-            <p>{{ __('Creation date') }}: {{ $task->created_at }}</p>
+            <p>{{ __('c.ID') }}: {{ $task->id }}</p>
+            <p>{{ __('c.Name') }}: {{ $task->name }}</p>
+            <p>{{ __('c.Description') }}: {{ $task->description }}</p>
+            <p>{{ __('c.Status') }}: {{ $task->status->name }}</p>
+            <p>{{ __('c.Creation date') }}: {{ $task->created_at }}</p>
             @if (Auth::user()?->id === $task->creator->id)
                 <p>
-                    <a href="{{ route('tasks.edit', $task) }}">{{ __('Edit') }}</a>
+                    <a href="{{ route('tasks.edit', $task) }}">{{ __('c.Edit') }}</a>
                     {{ html()->form('DELETE', route('tasks.destroy', $task))->open() }}
-                        {{ html()->submit('Delete') }}
+                        {{ html()->submit(__('c.Delete')) }}
                     {{ html()->form()->close() }}
                 </p>
             @endif

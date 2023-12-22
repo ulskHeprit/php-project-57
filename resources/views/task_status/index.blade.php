@@ -13,11 +13,11 @@
             <table class="mt-4">
                 <thead class="border-b-2 border-solid border-black text-left">
                     <tr>
-                        <th>{{ __('ID') }}</th>
-                        <th>{{ __('Name') }}</th>
-                        <th>{{ __('Creation date') }}</th>
+                        <th>{{ __('c.ID') }}</th>
+                        <th>{{ __('c.Name') }}</th>
+                        <th>{{ __('c.Creation date') }}</th>
                         @if (Auth::user())
-                        <th>{{ __('Action') }}</th>
+                        <th>{{ __('c.Action') }}</th>
                         @endif
                     </tr>
                 </thead>
@@ -29,9 +29,9 @@
                         <td>{{ $taskStatus->created_at }}</td>
                         @if (Auth::user())
                             <td>
-                                <a href="{{ route('task_statuses.edit', $taskStatus) }}">{{ __('Edit') }}</a>
+                                <a href="{{ route('task_statuses.edit', $taskStatus) }}">{{ __('c.Edit') }}</a>
                                 {{ html()->form('DELETE', route('task_statuses.destroy', $taskStatus))->open() }}
-                                    {{ html()->submit('Delete') }}
+                                    {{ html()->submit(__('c.Delete')) }}
                                 {{ html()->form()->close() }}
                             </td>
                         @endif

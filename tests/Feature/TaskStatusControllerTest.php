@@ -2,9 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Task;
 use App\Models\TaskStatus;
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\CanAssertFlash;

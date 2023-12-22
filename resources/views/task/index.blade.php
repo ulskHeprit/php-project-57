@@ -10,17 +10,26 @@
             @if (Auth::user())
                 <a href="{{ route('tasks.create') }}">{{ __('task.Create task') }}</a>
             @endif
+            {{ html()->form('GET', route('tasks.index'))->open() }}
+                {{ html()->label(__('task.Status'), 'filter[status_id]') }}
+                {{ html()->text('filter[status_id]', request()->filter['status_id'] ?? '') }}
+                {{ html()->label(__('task.Created by'), 'filter[created_by_id]') }}
+                {{ html()->text('filter[created_by_id]', request()->filter['created_by_id'] ?? '')}}
+                {{ html()->label(__('task.Assigned to'), 'filter[assigned_to_id]') }}
+                {{ html()->text('filter[assigned_to_id]', request()->filter['assigned_to_id'] ?? '')}}
+                {{ html()->submit(__('c.Submit')) }}
+            {{ html()->form()->close() }}
             <table class="mt-4">
                 <thead class="border-b-2 border-solid border-black text-left">
                     <tr>
-                        <th>{{ __('ID') }}</th>
-                        <th>{{ __('Name') }}</th>
-                        <th>{{ __('Status') }}</th>
-                        <th>{{ __('Creator') }}</th>
-                        <th>{{ __('Assigned to') }}</th>
-                        <th>{{ __('Creation date') }}</th>
+                        <th>{{ __('c.ID') }}</th>
+                        <th>{{ __('c.Name') }}</th>
+                        <th>{{ __('c.Status') }}</th>
+                        <th>{{ __('c.Creator') }}</th>
+                        <th>{{ __('c.Assigned to') }}</th>
+                        <th>{{ __('c.Creation date') }}</th>
                         @if (Auth::user())
-                        <th>{{ __('Action') }}</th>
+                        <th>{{ __('c.Action') }}</th>
                         @endif
                     </tr>
                 </thead>
@@ -35,10 +44,10 @@
                         <td>{{ $task->created_at }}</td>
                         @if (Auth::user())
                             <td>
-                                <a href="{{ route('tasks.edit', $task) }}">{{ __('Edit') }}</a>
+                                <a href="{{ route('tasks.edit', $task) }}">{{ __('c.Edit') }}</a>
                                 @if (Auth::user()->id === $task->creator->id)
                                     {{ html()->form('DELETE', route('tasks.destroy', $task))->open() }}
-                                        {{ html()->submit('Delete') }}
+                                        {{ html()->submit(__('c.Delete')) }}
                                     {{ html()->form()->close() }}
                                 @endif
                             </td>
